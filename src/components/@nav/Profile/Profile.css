@@ -1,0 +1,14 @@
+.profile{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-radius: 20px;
+}
+.profile>.profile-phtoto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-photo>div{
+    border-radius: 9999px;
+}

@@ -1,0 +1,42 @@
+.listings{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.tasks-cont{
+    background-color: white;
+    width: 30vw;
+    height: 80vh;
+    border-radius: 16px;
+    border:  0.4rem dashed black ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.tasks-cont>div{
+    overflow-y: scroll;
+    overflow-x: visible;
+    width: 89%;
+    height: 90%;
+}
+.title-cont{
+    position: relative;
+
+}
+.title-cont>h1:nth-child(1){
+    z-index: 3;
+    color: aliceblue;
+    position: relative;
+}
+.title-cont>h1:nth-child(2){
+    position: absolute;
+    bottom: -3%;
+    right: -2%;
+    z-index: 1;
+    
+
+}

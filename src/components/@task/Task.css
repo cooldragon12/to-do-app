@@ -1,0 +1,73 @@
+/* Parent Task */
+.task-cont {
+    width:99%;
+    display: flex;
+    height: 4rem;
+    justify-content: center;
+    align-items: center;
+    transition: background-color .1s ease-in, border .4s, flex .5s;
+}
+.task-cont:hover {
+    background-color: rgb(247, 247, 247);
+    border-top: 1px solid black;
+    border-right: 2px solid black;
+    border-left:  1px solid black;
+    border-bottom:  3px solid black;
+}
+
+/* Checked */
+.check>.content-cont>input[type=text]{
+    color:rgb(228, 228, 228); 
+}
+.check>.content-cont>span{
+    width: 100%;
+
+}
+
+/* onEdit */
+.focus{
+    background-color: rgb(231, 215, 203);
+    border-top: 1px solid black;
+    border-right: 2px solid black;
+    border-left:  1px solid black;
+    border-bottom:  3px solid black;
+}
+
+/* Check Box */
+.checkbox-cont input[type=checkbox]{
+    border-radius: 0;
+    background-color: azure;
+    width: 4rem;
+}
+.checkbox-cont input[type=checkbox]:checked{
+    border-radius: 0;
+    color: rgb(83, 153, 153);
+}
+
+/* Content Box */
+.content-cont {
+    width: 75%;
+    position: relative;
+}
+.content-cont>span{
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    border-radius: 5px;
+    background-color: rgb(228, 228, 228);
+    top: 55%;
+    transform: translateY(-55%);
+    transition: width .3s ease-in-out;
+}
+.content-cont input[type=text]{
+    background-color: transparent;
+    border: none;
+    transition: color .4s ease-out;
+    width: 90%;
+}
+.content-cont input[type=text]:focus-visible{
+    background-color: transparent;
+    outline: none;
+    
+}
+

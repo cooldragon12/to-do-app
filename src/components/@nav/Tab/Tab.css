@@ -1,0 +1,32 @@
+/* Parent Navlink a */
+.tab-link{
+    text-decoration: none;
+    width: 90%;
+}
+/* tab div */
+.tab{
+   display:grid;
+   
+    height: 4rem;
+    width: 100%;
+    border-radius: 16px;
+    grid-template-columns: 20% 80%;
+}
+.tab:hover, .tab:focus{
+    background-color: beige;
+}
+
+
+/* icon container */
+.icon-cont{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color: #5B5B5B;
+}
+.tab-name{
+    display: flex;
+    align-items: center;
+    color: #5B5B5B;
+
+}
