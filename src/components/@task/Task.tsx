@@ -1,91 +1,109 @@
 import React, { useState, useEffect} from "react"
+import { useList } from "../../store/context/ListTask";
+import { useTask } from "../../store/context/Tasking";
 import './Task.css';
 
+/**
+ * TaskProps provides `id`, `content`, status of `check`, boolean `editing` if the current task is editing 
+ */
 export interface TaskProps{
-    index: number,
+    id?:string,
     content: string,
     check:true|false,
     editing:true|false,
-    setTask:React.Dispatch<React.SetStateAction<{
-        content:string,
-        check:boolean,
-        editing:boolean
-    }[]>>
-    
+}
+/**
+ * TaskCompProps
+ * @param task - TaskProps
+ * @param index - this props determine which index the current task is on use
+ * @notice this will be change in the future when we figure out.
+ */
+export interface TaskCompProps{
+    task:TaskProps,
+    index: number 
 }
 
 
-export const Task:React.FC<TaskProps>= ({index, check, content, editing, setTask}:TaskProps)=>{
+export const Task:React.FC<TaskCompProps>= (task:TaskCompProps)=>{
     const [text, setText ] = useState("");
-    const changeEditable = (index:number, e?:React.KeyboardEvent<HTMLInputElement>)=>{
-        if (!editing){
-            setTask((prev) => {
-                var tasks = [...prev];
-                //Where to change the value
-                tasks[index].editing = true;
-                return([...tasks])
-            })
-        }else if(e?.key === "Enter" && content === "" && text !== ""){
-            // for after creating task, it will create another empty set
-            setTask((prev) => {
-                var tasks = [...prev];
-                 //Where to change the value
-                tasks[index].content = text;
-                tasks[index].editing = false;
-                return([...tasks, {content:"",editing:true,check:false}])
-            })
-        }else if(e?.key === "Enter" && text !== ""){
-            setTask((prev) => {
-                var tasks = [...prev];
-                 //Where to change the value
-                tasks[index].content = text;
-                tasks[index].editing = false;
-                
-                return([...tasks])
-            })
-        }
-    }
-    const handleCheck =(index:number)=>{
-        if(!editing){
+    const [check, setCheck] = useState(false);
+    const {checkTrueTask,checkFalseTask, saveTask, editTask, removeTask} = useTask();
 
-            if (!check ){
-                setTask((prev) => {
-                    var tasks = [...prev];
-                     //Where to change the value
-                    tasks[index].check = true;
-                    
-                    return([...tasks])
-                })
-            }else{
-                setTask((prev) => {
-                    var tasks = [...prev];
-                     //Where to change the value
-                    tasks[index].check = false;
-                    
-                    return([...tasks])
-                })
-            }
+    // When editing the task
+    const changeEditable = (index:number, e?:React.KeyboardEvent<HTMLInputElement>)=>{
+        // check after done editing if the text is not empty
+        if(task.task.content !== "" && text === ""){
+            console.log("Ayaw pumasok")
+            return;
+        }
+        
+        // use to able to edit the task 
+        if (!task.task.editing){
+            editTask(index);}
+        else if(e?.key === "Enter"){
+            // for after creating task, it will create another empty set
+            saveTask(index, text);
         }
     }
+    // Handles the remove of a task
+    const handleRemove = (index:number)=>{
+        removeTask(index);
+    }
+    // Handles the check status
+    const handleCheck =()=>{
+        if(task.task.editing){
+            console.log("dapta hidni dito")
+            return;
+        }
+        
+        setCheck(check=>!check)
+        if (task.task.check){
+            checkFalseTask(task.index);}
+            else
+            checkTrueTask(task.index)
+    }
+
+    // For typing 
     const handleTyping = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setText(e.target.value);
     }
-    
-    // 
-    // For Typying the content
-    useEffect(() => {
-        setText(content);
+    // const handleGenEdit = ()=>{
+    //     if (task.task.editing)
+    //     return;
+    //     saveTask(task.index,text);
+    // }
 
-    }, [content])
+
+    // useEffects HERE>>>>>>>>>>>>>>
+    // Handles the general edit of whole list
+    // useEffect(()=>{
+    //     changeEditable(task.index)
+    //     // handleGenEdit();
+    // },[task.task.editing])
+    
+    // First render and when changes happend in content 
+    useEffect(() => {
+        setCheck(task.task.check);
+        setText(task.task.content); 
+    }, [task.task.content])
+    // Rerender the Component task when change the check status
+    useEffect(()=>{ 
+    },[check])
+
     
     return(
-        <div tabIndex={index}  onClick={()=>handleCheck(index)} className={`task-cont ${check? "check":""} ${editing? "focus":""}`}>
+        <div tabIndex={task.index}  onClick={handleCheck} className={`task-cont${check? " check":""}${task.task.editing? " focus":""}`}>
             <div className={`checkbox-cont`}>
-                <input tabIndex={index+1} type="checkbox" checked={check} name="check" id="checkbox" />
+                <input tabIndex={task.index+1} readOnly  type="checkbox" checked={check} name="check" id="checkbox" />
             </div>
-            <div  onDoubleClickCapture={()=>changeEditable(index)} className={`content-cont`}>
+            <div   className={`content-cont`}>
                 <span></span>
-                <input autoFocus={editing} tabIndex={index+2} onKeyDown={(e)=>changeEditable(index, e)} onChange={(e)=>handleTyping(e)} type="text" disabled={editing? false:true} value={text}/>
+                <input autoFocus={task.task.editing} tabIndex={task.index+2} onKeyDown={(e)=>changeEditable(task.index, e)} onChange={(e)=>handleTyping(e)} value={text} type="text" disabled={!task.task.editing} />
+            </div>
+            <div className="options-cont">
+                <div className={`option-del ${task.task.editing? "appear":""}`} onClick={()=>handleRemove(task.index)}>
+                    delete
+                </div>
             </div>
         </div>
     )

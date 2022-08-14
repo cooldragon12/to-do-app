@@ -2,18 +2,17 @@
 .task-cont {
     width:99%;
     display: flex;
-    height: 4rem;
+    height: 3rem;
     justify-content: center;
     align-items: center;
     transition: background-color .1s ease-in, border .4s, flex .5s;
 }
 .task-cont:hover {
-    background-color: rgb(247, 247, 247);
-    border-top: 1px solid black;
-    border-right: 2px solid black;
-    border-left:  1px solid black;
-    border-bottom:  3px solid black;
+    background-color: var(--primary-color);
+    border: 1px solid var(--secondary-color);
+   
 }
+
 
 /* Checked */
 .check>.content-cont>input[type=text]{
@@ -36,12 +35,12 @@
 /* Check Box */
 .checkbox-cont input[type=checkbox]{
     border-radius: 0;
-    background-color: azure;
+    background-color: var(--primary-color);
     width: 4rem;
 }
 .checkbox-cont input[type=checkbox]:checked{
     border-radius: 0;
-    color: rgb(83, 153, 153);
+    color: var(--accent-color);
 }
 
 /* Content Box */
@@ -64,6 +63,7 @@
     border: none;
     transition: color .4s ease-out;
     width: 90%;
+    font-size:1rem;
 }
 .content-cont input[type=text]:focus-visible{
     background-color: transparent;
@@ -71,3 +71,11 @@
     
 }
 
+.options-cont>.option-del.appear{
+    opacity: 1;
+    visibility: visible;
+}
+.options-cont>.option-del{
+    opacity: 0;
+    visibility: hidden;
+}

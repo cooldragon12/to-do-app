@@ -1,42 +1,143 @@
 .listings{
     width: 100%;
     display: flex;
+    justify-content: baseline;
+    align-items:baseline;
+    flex-direction: row;
+    padding: 3rem;
+}
+.lg-button{
+    border: 1px dashed var(--secondary-color);
+    transition: background-color .3s;
+    width:15rem;
+    height: 8rem;
+}
+.md-button{
+    border: 1px dashed var(--secondary-color);
+    transition: background-color .3s;
+    padding: 2%;
+    width:10rem;
+    height: 4rem;
+}
+.lift-up{
+    display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    transition: background-color .2s, transform .2s;
+    background-color: var(--primary-color);
 }
-
+.animate-up:hover, .animate-up:focus{
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+.animate-up:hover>.lift-up, .animate-up:focus>.lift-up{
+    background-color: var(--accent-color);
+    transform: translate(-0.5rem, -0.5rem);
+    border: 1px solid var(--secondary-color);
+    
+}
 .tasks-cont{
-    background-color: white;
-    width: 30vw;
-    height: 80vh;
-    border-radius: 16px;
-    border:  0.4rem dashed black ;
+    background-color: var(--primary-color);
+    width: 90%;
+    height:100%;
+    /* border-radius: 16px;
+    border:  0.4rem dashed var(--secondary-color) ; */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-.tasks-cont>div{
-    overflow-y: scroll;
+.tasks-cont>.options{
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: underline;
+    width: 88%;
+    font-size: 11px;
+}
+.tasks-cont>.options .option{
+    opacity: 1;
+    visibility: 1;
+}
+.tasks-cont>.options .option.hide{
+    opacity: 0;
+    visibility: 0;
+}
+.tasks-cont>.tasking{
     overflow-x: visible;
     width: 89%;
     height: 90%;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+
 .title-cont{
     position: relative;
-
+    text-align: center;
 }
-.title-cont>h1:nth-child(1){
+.title-cont>h1{
     z-index: 3;
-    color: aliceblue;
+    color: var(--secondary-color);
     position: relative;
+    text-shadow: 4px 4px 1px var(--primary-color);
 }
-.title-cont>h1:nth-child(2){
-    position: absolute;
-    bottom: -3%;
-    right: -2%;
-    z-index: 1;
-    
 
+
+.list{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+/* Form for creating new List */
+.new-list{
+    position: absolute;
+    background-color: var(--secondary-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 4;
+}
+.new-list::before{
+    content: "";
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.308);
+}
+.new-list>div{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.new-list>div>h1{
+    color: var(--primary-color);
+    font-size: 3rem;
+    text-shadow: 2px 2px 1px var(--accent-color);
+    
+}
+
+.title-input{
+    padding: 0rem 1rem;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    font-size: 4rem;
+    text-align: center;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--accent-color);
+    transition: width .4s 1s ;
+    width: 0%;
+}
+.title-input.open{
+    width: 50%;
 }
