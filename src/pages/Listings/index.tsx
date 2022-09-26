@@ -2,18 +2,15 @@
 import React, { useState } from 'react';
 // 
 import List from '../../components/@list/List';
-import { useList } from '../../store/context/ListTask';
+
 import {
-    useSpring,
-    config,
     animated,
-    useTransition
 } from 'react-spring';
 
 // style import: Listings
-import './Listings.css'
-import { TasksProvider } from '../../store/context/Tasking';
-
+import './Listings.css';
+import usePop from '../../hooks/animation/usePop'
+import { useList } from '../../hooks/data/useList';
 
 /**
  * 
@@ -21,14 +18,13 @@ import { TasksProvider } from '../../store/context/Tasking';
  */
 const Listing = ()=>{
     const {lists, createList} = useList();
-    const [open, setOpen] =useState(false);
     const [text, setText] = useState("");
-
+    const {open ,setOpen, popTrans} = usePop();
     const handleCreateList = ()=>{
         if (text === "")
         return;
 
-        createList({title_list:text, id:lists.length | 0, tasks:[]});
+        createList({title:text, id:lists.length | 0, tasks:[]});
         setText("")
         setOpen(open=>!open)
     }
@@ -36,21 +32,7 @@ const Listing = ()=>{
         setText(e.target.value);
     }
 
-    const popTrans = useTransition(open,{
-        config: config.stiff,
-        from: { 
-            size: '0%', 
-            opacity:"0"
-        },
-        enter: {
-          size: open ? '90%' : '0%',
-          opacity: open? "1":"0"
-        },
-        leave:{
-            size: '0%', 
-            opacity:"0"
-        },
-    })
+    
     return(
         
         <div className="listings">
@@ -61,36 +43,41 @@ const Listing = ()=>{
             </div>
             {
             popTrans(({size, opacity},item)=>(
-                item?
-                <animated.div 
-                    className="new-list"
-                    style={{opacity, width:size, height:size}}
+                open?
+                <animated.div
+                    className="new-list-background"
+                    style={{opacity}}
+                    onClick={()=>setOpen(false)}
                 >
-                    <div>
-                        <h1>CREATE NEW LIST</h1>
-                    </div>
-                    <input autoFocus onChange={(e)=>handleTyping(e)} value={text} name="title-input"  type="text" className={`title-input ${open? "open":""}`}/>
-                    <div className="button-set">
-                    <div  className="md-button animate-up" onClick={handleCreateList}>
-                        <div className="lift-up">
-                            CREATE
+                    <animated.div 
+                        className="new-list"
+                        style={{opacity, width:size, height:size}}
+                        onClick={e=>e.stopPropagation()}
+                    >
+                        <div>
+                            <h1>CREATE NEW LIST</h1>
                         </div>
-                    </div>
-                    <div  className="md-button animate-up" onClick={()=>setOpen(open=>!open)}>
-                        <div className="lift-up">
-                            CANCEL
+                        <input autoFocus onChange={(e)=>handleTyping(e)} value={text} name="title-input"  type="text" className={`title-input ${open? "open":""}`}/>
+                        <div className="button-set">
+                        <div  className="md-button animate-up" onClick={handleCreateList}>
+                            <div className="lift-up">
+                                CREATE
+                            </div>
                         </div>
-                    </div>
+                        <div  className="md-button animate-up" onClick={()=>setOpen(open=>!open)}>
+                            <div className="lift-up">
+                                CANCEL
+                            </div>
+                        </div>
 
-                    </div>
+                        </div>
+                    </animated.div>
                 </animated.div>:<></>
             ))
             }
             {
                 lists.map((list, index)=>
-                <TasksProvider key={index}>
                     <List {...list} key={index}/>
-                </TasksProvider>
                 )
             }       
         </div>

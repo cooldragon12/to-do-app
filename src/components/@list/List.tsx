@@ -9,9 +9,10 @@ import {
   } from '@react-spring/web'
 
 
-import { Task, TaskCompProps} from '../../components/@task/Task';
-import { useTask } from "../../store/context/Tasking";
-import { useList } from "../../store/context/ListTask";
+import { Task, TaskProps} from '../../components/@task/Task';
+import usePop from "../../hooks/animation/usePop";
+import { useTask } from "../../hooks/data/useTask";
+import { useList } from "../../hooks/data/useList";
 
 
 
@@ -24,30 +25,28 @@ import { useList } from "../../store/context/ListTask";
  * - `Optional` So we can update the title without updating the tasks
  */
 export interface IListProvider{
-    id:number,
-    title_list: string,
-    tasks: TaskCompProps[] | [],
-    onEdit?:boolean
+    id:string,
+    title: string,
+    description?: string,
+    tasks: TaskProps[] | [],
+    date_created?:string,
+    onEdit?:boolean, 
+    index:number
 } 
 /**
  * 
- * @param list IListProvider contains `id`,'title_list', and `tasks`
+ * @param lists IListProvider contains `id`,'title_list', and `tasks`
  * @returns the component list
  */
-const List:React.FC<IListProvider>= (list: IListProvider)=>{
-    const {loadTasks, state, addTask} = useTask(); 
-    const [open, setOpen] = useState(false);
-    useEffect(()=>{
-        loadTasks(list.tasks);
-    }, [list])
+const List:React.FC<IListProvider>= (lists)=>{
+    
+    const {open, setOpen, popTrans} = usePop();
+    
+    // useEffect(()=>{
+    //     load(list.tasks);
+    // }, [list])
     
     
-
-
-
-    const handleAddTask = ()=>{
-        addTask({content:"", check:false, editing:true })
-    }
 
     // Handles the animation
     const springApi =useSpringRef();
@@ -65,18 +64,18 @@ const List:React.FC<IListProvider>= (list: IListProvider)=>{
         },
       })
     
-    const transApi = useSpringRef()
-    const transition = useTransition(open ? state : [], {
-        ref: transApi,
-        trail: 400,
-        from: { opacity: 0, scale: 0 },
-        enter: { opacity: 1, scale: 1 },
-        leave: { opacity: 0, scale: 0 },
-      })
-    useChain(open ? [springApi, transApi] : [transApi, springApi], [
-        0,
-        open ? 0.1 : 0.6,
-      ])
+    // const transApi = useSpringRef()
+    // const transition = useTransition(open ? state : [], {
+    //     ref: transApi,
+    //     trail: 400,
+    //     from: { opacity: 0, scale: 0 },
+    //     enter: { opacity: 1, scale: 1 },
+    //     leave: { opacity: 0, scale: 0 },
+    //   })
+    // useChain(open ? [springApi, transApi] : [transApi, springApi], [
+    //     0,
+    //     open ? 0.1 : 0.6,
+    //   ])
 
     const handleOpen = ()=>{
         setOpen(true)
@@ -95,7 +94,7 @@ const List:React.FC<IListProvider>= (list: IListProvider)=>{
                 onDoubleClick={handleClose}
             >
                 <div className="title-cont"  >
-                    <h1>{list?.title_list}</h1>
+                    <h1>{lists?.title}</h1>
                 </div>
                 
                 <div className="tasks-cont">
@@ -106,18 +105,28 @@ const List:React.FC<IListProvider>= (list: IListProvider)=>{
                     </div>
                     <div id='tasking' className='tasking'>
                         
-                        {
+                        {/* {
                             transition((style, item) => (
                                 <animated.div
-                                  className=""
                                   style={{ ...style}}
                                 >
                                     <Task {...item}/> 
                                 </animated.div>
                             
                             ))
-                        }
-                        <div  className="md-button" onClick={handleAddTask}>
+                                
+                        } */}
+                        {/* {
+                            popTrans(({size, opacity},item)=>(
+                                item?
+                                <animated.div 
+                                    style={{opacity, width:size, height:size}}
+                                >
+                                    <Task task={} listIndex={lists.index}/> 
+                                </animated.div>:<></>
+                            ))
+                        } */}
+                        <div  className="md-button" >
                             <div className="lift-up">
                                 ADD
                             </div>

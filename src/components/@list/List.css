@@ -1,0 +1,55 @@
+.tasks-cont{
+    /* background-color: var(--primary-color); */
+    width: 90%;
+    height:100%;
+    /* border-radius: 16px;
+    border:  0.4rem dashed var(--secondary-color) ; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.tasks-cont>.options{
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: underline;
+    width: 88%;
+    font-size: 11px;
+}
+.tasks-cont>.options .option{
+    opacity: 1;
+    visibility: 1;
+}
+.tasks-cont>.options .option.hide{
+    opacity: 0;
+    visibility: 0;
+}
+.tasks-cont>.tasking{
+    overflow-x: visible;
+    width: 89%;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.title-cont{
+    position: relative;
+    text-align: center;
+}
+.title-cont>h1{
+    z-index: 3;
+    color: var(--secondary-color);
+    position: relative;
+    text-shadow: 4px 4px 1px var(--primary-color);
+}
+
+
+.list{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+

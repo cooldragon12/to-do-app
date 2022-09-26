@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react"
-import { useList } from "../../store/context/ListTask";
-import { useTask } from "../../store/context/Tasking";
+import { useList } from "../../hooks/data/useList";
+import { useTask } from "../../hooks/data/useTask";
 import './Task.css';
 
 /**
@@ -8,6 +8,7 @@ import './Task.css';
  */
 export interface TaskProps{
     id?:string,
+    index: number,
     content: string,
     check:true|false,
     editing:true|false,
@@ -18,49 +19,51 @@ export interface TaskProps{
  * @param index - this props determine which index the current task is on use
  * @notice this will be change in the future when we figure out.
  */
-export interface TaskCompProps{
-    task:TaskProps,
-    index: number 
-}
 
 
-export const Task:React.FC<TaskCompProps>= (task:TaskCompProps)=>{
+/**
+ * 
+ * @param task index
+ * @task id, content, check, editing
+ * @returns 
+ */
+export const Task:React.FC<TaskProps> = (task, listIndex:number) =>{
     const [text, setText ] = useState("");
     const [check, setCheck] = useState(false);
-    const {checkTrueTask,checkFalseTask, saveTask, editTask, removeTask} = useTask();
+    const {checkTrueTask, checkFalseTask, saveTask, editTask, removeTask} = useTask(task.index,listIndex);
 
     // When editing the task
-    const changeEditable = (index:number, e?:React.KeyboardEvent<HTMLInputElement>)=>{
+    const changeEditable = (e?:React.KeyboardEvent<HTMLInputElement>)=>{
         // check after done editing if the text is not empty
-        if(task.task.content !== "" && text === ""){
+        if(task.content !== "" && text === ""){
             console.log("Ayaw pumasok")
             return;
         }
         
         // use to able to edit the task 
-        if (!task.task.editing){
-            editTask(index);}
+        if (!task.editing){
+            editTask();}
         else if(e?.key === "Enter"){
             // for after creating task, it will create another empty set
-            saveTask(index, text);
+            saveTask(text);
         }
     }
     // Handles the remove of a task
-    const handleRemove = (index:number)=>{
-        removeTask(index);
+    const handleRemove = ()=>{
+        removeTask();
     }
     // Handles the check status
     const handleCheck =()=>{
-        if(task.task.editing){
+        if(task.editing){
             console.log("dapta hidni dito")
             return;
         }
         
         setCheck(check=>!check)
-        if (task.task.check){
-            checkFalseTask(task.index);}
+        if (task.check){
+            checkFalseTask();}
             else
-            checkTrueTask(task.index)
+            checkTrueTask()
     }
 
     // For typing 
@@ -83,25 +86,25 @@ export const Task:React.FC<TaskCompProps>= (task:TaskCompProps)=>{
     
     // First render and when changes happend in content 
     useEffect(() => {
-        setCheck(task.task.check);
-        setText(task.task.content); 
-    }, [task.task.content])
+        setCheck(task.check);
+        setText(task.content); 
+    }, [task.content])
     // Rerender the Component task when change the check status
     useEffect(()=>{ 
     },[check])
 
     
     return(
-        <div tabIndex={task.index}  onClick={handleCheck} className={`task-cont${check? " check":""}${task.task.editing? " focus":""}`}>
+        <div tabIndex={task.index}  onClick={handleCheck} className={`task-cont${check? " check":""}${task.editing? " focus":""}`}>
             <div className={`checkbox-cont`}>
                 <input tabIndex={task.index+1} readOnly  type="checkbox" checked={check} name="check" id="checkbox" />
             </div>
             <div   className={`content-cont`}>
                 <span></span>
-                <input autoFocus={task.task.editing} tabIndex={task.index+2} onKeyDown={(e)=>changeEditable(task.index, e)} onChange={(e)=>handleTyping(e)} value={text} type="text" disabled={!task.task.editing} />
+                <input autoFocus={task.editing} tabIndex={task.index+2} onKeyDown={(e)=>changeEditable(e)} onChange={(e)=>handleTyping(e)} value={text} type="text" disabled={!task.editing} />
             </div>
             <div className="options-cont">
-                <div className={`option-del ${task.task.editing? "appear":""}`} onClick={()=>handleRemove(task.index)}>
+                <div className={`option-del ${task.editing? "appear":""}`} onClick={()=>handleRemove()}>
                     delete
                 </div>
             </div>
